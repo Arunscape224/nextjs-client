@@ -1,18 +1,34 @@
-import { useMeQuery } from "../generated/graphql";
-
+import { useLogoutMutation, useMeQuery } from "../generated/graphql";
+import { Button } from "@chakra-ui/core";
+import { withUrqlClient } from "next-urql";
+import { createUrqlClient } from "../utils/createUrqlClient";
 const Dashboard = () => {
-  const [{data, fetching}] = useMeQuery()
-  let body = null
-  
-  if(fetching) {
-    body = <div>...loading</div>
+  const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
+  const [{ data, fetching }] = useMeQuery();
+  let body = null;
+
+  if (fetching) {
+    body = <div>...loading</div>;
   } else if (!data?.me) {
-    body = (<div>Login</div>)
+    body = <div>Login</div>;
   } else {
-    body = (<div>{data.me.username}</div>)
+    body = (
+      <div>
+        <div>{data.me.username}</div>
+        <Button
+          colorScheme="orange"
+          onClick={() => {
+            logout();
+          }}
+          isLoading={logoutFetching}
+        >
+          Logout
+        </Button>
+      </div>
+    );
   }
 
-return <div>{body}</div>;
+  return <div>{body}</div>;
 };
 
-export default Dashboard;
+export default withUrqlClient(createUrqlClient)(Dashboard);

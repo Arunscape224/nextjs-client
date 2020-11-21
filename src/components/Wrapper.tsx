@@ -1,4 +1,5 @@
 import { Box } from "@chakra-ui/core";
+
 interface WrapperProps {
   variant?: "small" | "regular";
 }
