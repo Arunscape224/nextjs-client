@@ -1,4 +1,4 @@
-import { Box, Button } from "@chakra-ui/core";
+import { Box, Button, CircularProgress } from "@material-ui/core";
 import { Form, Formik } from "formik";
 import React from "react";
 import { InputField } from "../components/InputField";
@@ -44,8 +44,8 @@ const Login: React.FC<{}> = ({}) => {
               />
             </Box>
             <Box mt="4">
-              <Button type="submit" isLoading={isSubmitting} colorScheme="blue">
-                Login
+              <Button type="submit" color="primary">
+              {isSubmitting ? <CircularProgress /> : <div>Login</div>}
               </Button>
             </Box>
           </Form>

@@ -1,30 +1,33 @@
-import { Box, Button } from "@chakra-ui/core";
+import { Box, Button, CircularProgress } from "@material-ui/core";
 import { Form, Formik } from "formik";
 import React from "react";
 import { InputField } from "../components/InputField";
 import { Wrapper } from "../components/Wrapper";
 import { useRegisterMutation } from "../generated/graphql";
 import { toErrorMap } from "../utils/toErrorMap";
-import { useRouter } from 'next/router'
+import { useRouter } from "next/router";
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
+// import DatePicker from "react-datepicker";
+import TextField from "@material-ui/core/TextField/TextField";
+
 interface registerProps {}
 
 const Register: React.FC<registerProps> = ({}) => {
   const [, register] = useRegisterMutation();
-  const router = useRouter()
+  const router = useRouter();
   return (
     <Wrapper variant="small">
       <Formik
-        initialValues={{ email: "", username: "", password: "" }}
+        initialValues={{ email: "", username: "", password: "", birthday: "" }}
         onSubmit={async (values, { setErrors }) => {
-          // console.log(values);
-          const response = await register({options: values});
-          if (response.data?.register.errors) {
-            setErrors(toErrorMap(response.data.register.errors));
-          } else if(response.data?.register.user) {
-            router.push("/dashboard")
-          }
+          console.log(values);
+          // const response = await register({ options: values });
+          // if (response.data?.register.errors) {
+          //   setErrors(toErrorMap(response.data.register.errors));
+          // } else if (response.data?.register.user) {
+          //   router.push("/dashboard");
+          // }
         }}
       >
         {({ isSubmitting }) => (
@@ -37,11 +40,7 @@ const Register: React.FC<registerProps> = ({}) => {
               />
             </Box>
             <Box mt="4">
-              <InputField
-                name="email"
-                placeholder="email"
-                label="email"
-              />
+              <InputField name="email" placeholder="email" label="email" />
             </Box>
             <Box mt="4">
               <InputField
@@ -52,8 +51,16 @@ const Register: React.FC<registerProps> = ({}) => {
               />
             </Box>
             <Box mt="4">
-              <Button type="submit" isLoading={isSubmitting} colorScheme="blue">
-                Register
+              <InputField
+                type="date"
+                placeholder="birthday"
+                name="birthday"
+                label="birthday"
+              />
+            </Box>
+            <Box mt="4">
+              <Button type="submit" color="primary">
+                {isSubmitting ? <CircularProgress /> : <div>Register</div>}
               </Button>
             </Box>
           </Form>
@@ -63,4 +70,4 @@ const Register: React.FC<registerProps> = ({}) => {
   );
 };
 
-export default withUrqlClient(createUrqlClient)(Register);;
+export default withUrqlClient(createUrqlClient)(Register);

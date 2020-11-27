@@ -3,10 +3,10 @@ import { useField } from "formik";
 import {
   FormControl,
   FormLabel,
-  Input,
-  FormErrorMessage,
-  Button,
-} from "@chakra-ui/core";
+  Input
+} from "@material-ui/core";
+import { Alert } from '@material-ui/lab';
+
 
 type InputFieldProps = InputHTMLAttributes<HTMLInputElement> & {
   name: string;
@@ -21,15 +21,18 @@ export const InputField: React.FC<InputFieldProps> = ({
 }) => {
   const [field, { error }] = useField(props);
   return (
-    <FormControl isInvalid={!!error}>
+    <FormControl style={{paddingTop: '20px'}}  error={!!error}>
       <FormLabel htmlFor={field.name}>{label}</FormLabel>
       <Input
         {...field}
         {...props}
         id={field.name}
+        color="primary"
         placeholder={props.placeholder}
       />
-      <FormErrorMessage>{error}</FormErrorMessage>
+      {
+        error ? <Alert severity="error">{error}</Alert> : null
+      }
     </FormControl>
   );
 };
